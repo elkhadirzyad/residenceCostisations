@@ -1,0 +1,134 @@
+import { useState, useEffect } from "react";
+import { supabase } from "./supabaseClient";
+import MesCotisations from "./components/MesCotisations";
+import AdminDashboard from "./components/AdminDashboard"; // dashboard global pour admin
+import CreateAccount from "./components/CreateAccount";
+
+export default function Auth() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [isSignup, setIsSignup] = useState(false);
+  const [session, setSession] = useState(null);
+
+  // check session on mount
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) checkUserRole(data.session.user);
+    });
+
+    const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) checkUserRole(session.user);
+      else setSession(null);
+    });
+
+    return () => subscription?.subscription.unsubscribe();
+  }, []);
+
+  // Récupérer le rôle depuis la table utilisateurs
+  const checkUserRole = async (user) => {
+    setLoading(true);
+    const { data: profil, error: profilError } = await supabase
+      .from("utilisateurs")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    if (profilError) {
+      console.error("Erreur récupération rôle:", profilError.message);
+      setSession(user); // fallback si erreur
+    } else {
+      setSession({ ...user, role: profil.role });
+    }
+    setLoading(false);
+  };
+
+  // Login
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password });
+    if (authError) {
+      alert(authError.message);
+      setLoading(false);
+      return;
+    }
+
+    const user = authData.user;
+    await checkUserRole(user);
+    setLoading(false);
+  };
+
+  if (loading) return <div className="p-4">Chargement...</div>;
+
+  //Redirection selon rôle
+  if (session) {
+    return session.role == "admin" ? <AdminDashboard /> : <MesCotisations session={session}/>;
+  }
+
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="p-6 bg-white shadow-lg rounded-xl w-full max-w-sm">
+        <h2 className="text-xl font-bold mb-4 text-center">
+          {isSignup ? "Créer un compte" : "Connexion"}
+        </h2>
+
+        {/* Formulaire signup ou login */}
+        {isSignup ? (
+          <CreateAccount />
+        ) : (
+          <form onSubmit={handleLogin} className="flex flex-col space-y-3">
+            <input
+              className="border p-2 rounded"
+              type="email"
+              placeholder="Adresse email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <input
+              className="border p-2 rounded"
+              type="password"
+              placeholder="Mot de passe"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-4 py-2 rounded w-full"
+              disabled={loading}
+            >
+              {loading ? "Connexion..." : "Se connecter"}
+            </button>
+          </form>
+        )}
+
+        <div className="text-center mt-4">
+          {isSignup ? (
+            <p>
+              Déjà un compte ?{" "}
+              <button
+                onClick={() => setIsSignup(false)}
+                className="text-blue-600 underline"
+              >
+                Se connecter
+              </button>
+            </p>
+          ) : (
+            <p>
+              Pas encore de compte ?{" "}
+              <button
+                onClick={() => setIsSignup(true)}
+                className="text-blue-600 underline"
+              >
+                S’inscrire
+              </button>
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

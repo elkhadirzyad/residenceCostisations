@@ -1,0 +1,22 @@
+{
+  "name": "mon-app",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://ton-nom.github.io/mon-app/",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@supabase/supabase-js": "^2.34.0"
+  },
+  "devDependencies": {
+    "vite": "^5.1.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "gh-pages": "^5.0.0"
+  }
+}
