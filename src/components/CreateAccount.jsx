@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../supabaseClient";
+import "./CreateAccount.css";
 
 export default function CreateAccount() {
   const [email, setEmail] = useState("");
@@ -13,7 +14,9 @@ export default function CreateAccount() {
 
   useEffect(() => {
     const fetchResidences = async () => {
-      const { data, error } = await supabase.from("residences").select("id, nom");
+      const { data, error } = await supabase
+        .from("residences")
+        .select("id, nom");
       if (error) {
         console.error("Erreur chargement résidences:", error.message);
       } else {
@@ -24,24 +27,22 @@ export default function CreateAccount() {
   }, []);
 
   const handleSignup = async (e) => {
-  e.preventDefault();
-  setLoading(true);
+    e.preventDefault();
+    setLoading(true);
 
-  const { data: signupData, error: signupError } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      emailRedirectTo: null, // <- disables the confirmation email
-    },
-  });
+    const { data: signupData, error: signupError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { emailRedirectTo: null },
+    });
 
-  if (signupError) {
-    alert(signupError.message);
-    setLoading(false);
-    return;
-  }
+    if (signupError) {
+      alert(signupError.message);
+      setLoading(false);
+      return;
+    }
 
-  const user = signupData.user;
+    const user = signupData.user;
 
     if (user) {
       const { error: insertError } = await supabase.from("utilisateurs").insert([
@@ -67,54 +68,53 @@ export default function CreateAccount() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="p-6 bg-white shadow-lg rounded-xl w-full max-w-md">
-        <form onSubmit={handleSignup} className="grid gap-4 w-full">
+    <div className="create-container">
+      <div className="create-card">
+        <form onSubmit={handleSignup} className="create-form">
           <input
-            className="border p-2 rounded w-full"
             type="text"
             placeholder="Nom complet"
             value={nom}
             onChange={(e) => setNom(e.target.value)}
             required
+            className="create-input"
           />
           <input
-            className="border p-2 rounded w-full"
             type="tel"
             placeholder="Téléphone"
             value={telephone}
             onChange={(e) => setTelephone(e.target.value)}
+            className="create-input"
           />
           <input
-            className="border p-2 rounded w-full"
             type="email"
             placeholder="Adresse email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            className="create-input"
           />
           <input
-            className="border p-2 rounded w-full"
             type="password"
             placeholder="Mot de passe"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            className="create-input"
           />
           <select
-            className="border p-2 rounded w-full"
             value={role}
             onChange={(e) => setRole(e.target.value)}
+            className="create-select"
           >
             <option value="locataire">Locataire</option>
             <option value="proprietaire">Propriétaire</option>
           </select>
-
           <select
-            className="border p-2 rounded w-full"
             value={residenceId}
             onChange={(e) => setResidenceId(e.target.value)}
             required
+            className="create-select"
           >
             <option value="">-- Sélectionner une résidence --</option>
             {residences.map((res) => (
@@ -123,12 +123,7 @@ export default function CreateAccount() {
               </option>
             ))}
           </select>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-green-600 text-white px-4 py-2 rounded w-full"
-          >
+          <button type="submit" disabled={loading} className="create-button">
             {loading ? "Création..." : "Créer mon compte"}
           </button>
         </form>

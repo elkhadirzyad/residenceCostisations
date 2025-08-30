@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
+import "./AdminDashboard.css";
 
 export default function AdminDashboard() {
   const [user, setUser] = useState(null);
@@ -47,26 +48,24 @@ export default function AdminDashboard() {
     if (!error) setCotisations(data || []);
   };
 
-  // Cotisation avec popup natif
   const handleCotiser = async (residenceId, mois) => {
-    const montant = window.prompt(`Saisir le montant de la cotisation (${mois}) pour la residence (${residenceId}) en MAD :`);
-    if (!montant) return; // Annulé ou vide
+    const montant = window.prompt(
+      `Saisir le montant de la cotisation (${mois}) pour la residence (${residenceId}) en MAD :`
+    );
+    if (!montant) return;
 
     const { error } = await supabase.from("cotisations").insert([
       {
         residence_id: residenceId,
         mois,
-        statut: "publiée", // ⚠️ adapter selon CHECK dans ta DB
+        statut: "publiée",
         mode_calcul: "fixe",
         total: parseFloat(montant),
       },
     ]);
 
-    if (error) {
-      alert("Erreur cotisation : " + error.message);
-    } else {
-      await fetchCotisations();
-    }
+    if (error) alert("Erreur cotisation : " + error.message);
+    else await fetchCotisations();
   };
 
   const handleUploadRecu = async (residenceId, mois, file) => {
@@ -83,14 +82,13 @@ export default function AdminDashboard() {
 
     await supabase
       .from("cotisations")
-      .update({ recu_url: filePath, statut: "Validé" }) // ⚠️ adapter selon CHECK
+      .update({ recu_url: filePath, statut: "Validé" })
       .eq("residence_id", residenceId)
       .eq("mois", mois);
 
     await fetchCotisations();
   };
 
-  // 🔹 Calcul du budget total par mois
   const monthlyTotals = months.reduce((acc, mois) => {
     acc[mois] = cotisations
       .filter((c) => c.mois === mois)
@@ -98,31 +96,27 @@ export default function AdminDashboard() {
     return acc;
   }, {});
 
-  if (loading) return <div className="p-4">Chargement...</div>;
+  if (loading) return <div className="admin-container">Chargement...</div>;
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">
+    <div className="admin-container">
+      <div className="admin-header">
+        <h2 className="admin-title">
           Admin Dashboard - Bonjour {user?.email}
         </h2>
-        <button
-          onClick={handleLogout}
-          className="bg-red-600 text-white px-4 py-2 rounded"
-        >
+        <button onClick={handleLogout} className="logout-button">
           Déconnexion
         </button>
       </div>
 
-      {/* Tableau */}
-      <table className="w-full border text-sm">
-        <thead className="bg-gray-100">
+      <table className="admin-table">
+        <thead>
           <tr>
-            <th className="p-2 border">Résidence</th>
+            <th>Résidence</th>
             {months.map((m) => (
-              <th key={m} className="p-2 border">
+              <th key={m}>
                 {m}
-                <div className="text-xs text-gray-600">
+                <div style={{ fontSize: "0.75rem", color: "#4b5563" }}>
                   Budget: {monthlyTotals[m]} MAD
                 </div>
               </th>
@@ -131,25 +125,24 @@ export default function AdminDashboard() {
         </thead>
         <tbody>
           {residences.map((res) => (
-            <tr key={res.id} className="border-t text-center">
-              <td className="p-2 font-bold">{res.nom}</td>
+            <tr key={res.id}>
+              <td style={{ fontWeight: "bold" }}>{res.nom}</td>
               {months.map((m) => {
                 const cot = cotisations.find(
                   (c) => c.residence_id === res.id && c.mois === m
                 );
 
                 return (
-                  <td key={m} className="p-2">
+                  <td key={m}>
                     {!cot ? (
                       <button
                         onClick={() => handleCotiser(res.id, m)}
-                        className="bg-blue-500 text-white px-2 py-1 rounded"
+                        className="cotiser-button"
                       >
                         Cotiser
                       </button>
                     ) : (
-                      <div className="flex flex-col items-center gap-1">
-                        {/* Bouton suppression / statut */}
+                      <div className="cotisation-status">
                         <button
                           onClick={async () => {
                             const { error } = await supabase
@@ -157,26 +150,23 @@ export default function AdminDashboard() {
                               .delete()
                               .eq("id", cot.id);
 
-                            if (error) {
-                              alert("Erreur suppression : " + error.message);
-                            } else {
-                              await fetchCotisations();
-                            }
+                            if (error) alert("Erreur suppression : " + error.message);
+                            else await fetchCotisations();
                           }}
-                          className={`px-2 py-1 rounded text-white ${
-                            cot.statut === "Validé" ? "bg-green-600" : "bg-yellow-500"
+                          className={`${
+                            cot.statut === "Validé"
+                              ? "status-valid"
+                              : "status-pending"
                           }`}
                         >
                           {cot.statut || "Publié"} ({cot.total} MAD)
                         </button>
-
-                        {/* Upload reçu */}
                         <input
                           type="file"
                           onChange={(e) =>
                             handleUploadRecu(res.id, m, e.target.files[0])
                           }
-                          className="text-xs"
+                          className="file-input"
                         />
                       </div>
                     )}

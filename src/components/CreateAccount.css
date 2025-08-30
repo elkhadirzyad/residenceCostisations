@@ -1,0 +1,50 @@
+/* CreateAccount.css */
+
+.create-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f9fafb; /* gray-50 */
+  padding: 1rem;
+}
+
+.create-card {
+  padding: 1.5rem;
+  background-color: #ffffff;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 450px;
+}
+
+.create-form {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+}
+
+.create-input,
+.create-select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.create-button {
+  background-color: #16a34a; /* green-600 */
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.create-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}

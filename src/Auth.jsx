@@ -3,6 +3,7 @@ import { supabase } from "./supabaseClient";
 import MesCotisations from "./components/MesCotisations";
 import AdminDashboard from "./components/AdminDashboard"; // dashboard global pour admin
 import CreateAccount from "./components/CreateAccount";
+import "./authForm.css";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
@@ -68,67 +69,75 @@ export default function Auth() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="p-6 bg-white shadow-lg rounded-xl w-full max-w-sm">
-        <h2 className="text-xl font-bold mb-4 text-center">
-          {isSignup ? "Créer un compte" : "Connexion"}
-        </h2>
+   <div
+className="auth-container"
+>
+  <div
+   className="auth-card"
+  >
+    <h2
+      className="auth-title"
+    >
+      {isSignup ? "Créer un compte" : "Connexion"}
+    </h2>
 
-        {/* Formulaire signup ou login */}
-        {isSignup ? (
-          <CreateAccount />
-        ) : (
-          <form onSubmit={handleLogin} className="flex flex-col space-y-3">
-            <input
-              className="border p-2 rounded"
-              type="email"
-              placeholder="Adresse email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <input
-              className="border p-2 rounded"
-              type="password"
-              placeholder="Mot de passe"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button
-              type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded w-full"
-              disabled={loading}
-            >
-              {loading ? "Connexion..." : "Se connecter"}
-            </button>
-          </form>
-        )}
+    {isSignup ? (
+      <CreateAccount />
+    ) : (
+      <form
+        onSubmit={handleLogin}
+         className="auth-form"
+      >
+        <input
+          type="email"
+          placeholder="Adresse email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="auth-input"
+        />
+        <input
+          type="password"
+          placeholder="Mot de passe"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+         className="auth-input"
+        />
+        <button
+          type="submit"
+          disabled={loading}
+          className="auth-button"
+        >
+          {loading ? "Connexion..." : "Se connecter"}
+        </button>
+      </form>
+    )}
 
-        <div className="text-center mt-4">
-          {isSignup ? (
-            <p>
-              Déjà un compte ?{" "}
-              <button
-                onClick={() => setIsSignup(false)}
-                className="text-blue-600 underline"
-              >
-                Se connecter
-              </button>
-            </p>
-          ) : (
-            <p>
-              Pas encore de compte ?{" "}
-              <button
-                onClick={() => setIsSignup(true)}
-                className="text-blue-600 underline"
-              >
-                S’inscrire
-              </button>
-            </p>
-          )}
-        </div>
-      </div>
+    <div className="auth-footer">
+      {isSignup ? (
+        <p>
+          Déjà un compte ?{" "}
+          <button
+            onClick={() => setIsSignup(false)}
+            className="auth-footer"
+          >
+            Se connecter
+          </button>
+        </p>
+      ) : (
+        <p>
+          Pas encore de compte ?{" "}
+          <button
+            onClick={() => setIsSignup(true)}
+          >
+            S’inscrire
+          </button>
+        </p>
+      )}
     </div>
+  </div>
+</div>
+
   );
 }

@@ -1,0 +1,68 @@
+/* MesCotisations.css */
+
+.cotisations-container {
+  padding: 1.5rem;
+  font-family: Arial, sans-serif;
+}
+
+.cotisations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.cotisations-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.logout-button {
+  background-color: #dc2626; /* red-600 */
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  opacity: 0.9;
+}
+
+.cotisations-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.cotisations-table th,
+.cotisations-table td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.cotisations-table thead {
+  background-color: #f3f4f6; /* gray-100 */
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  color: white;
+  font-weight: bold;
+}
+
+.status-valide {
+  background-color: #16a34a; /* green-600 */
+}
+
+.status-pending {
+  background-color: #eab308; /* yellow-500 */
+}
+
+.status-empty {
+  color: #9ca3af; /* gray-400 */
+}
