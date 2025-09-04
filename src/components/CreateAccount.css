@@ -1,12 +1,15 @@
 /* CreateAccount.css */
 
+.h3-create-account {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .create-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background-color: #f9fafb; /* gray-50 */
-  padding: 1rem;
 }
 
 .create-card {

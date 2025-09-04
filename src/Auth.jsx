@@ -30,19 +30,22 @@ export default function Auth() {
   const checkUserRole = async (user) => {
     setLoading(true);
     const { data: profil, error: profilError } = await supabase
-      .from("utilisateurs")
-      .select("role")
-      .eq("id", user.id)
-      .single();
+       .from("utilisateurs")
+  .select("role")
+  .eq("email", user.email)
+  .single();
 
-    if (profilError) {
-      console.error("Erreur récupération rôle:", profilError.message);
-      setSession(user); // fallback si erreur
-    } else {
-      setSession({ ...user, role: profil.role });
-    }
-    setLoading(false);
-  };
+   if (profilError || !profil) {
+    console.error("Utilisateur introuvable ou non autorisé:", profilError?.message);
+    await supabase.auth.signOut();
+    setSession(null);
+    alert("Votre compte n'est pas autorisé. Contactez l’administrateur.");
+  } else {
+    setSession({ ...user, role: profil.role });
+  }
+
+  setLoading(false);
+};
 
   // Login
   const handleLogin = async (e) => {
@@ -127,12 +130,7 @@ className="auth-container"
         </p>
       ) : (
         <p>
-          Pas encore de compte ?{" "}
-          <button
-            onClick={() => setIsSignup(true)}
-          >
-            S’inscrire
-          </button>
+       
         </p>
       )}
     </div>

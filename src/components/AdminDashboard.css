@@ -191,4 +191,73 @@ table, th, td {
   color: #111827;
 }
 
+/* ---- Change Password Section ---- */
+.change-password-section {
+  margin: 2rem auto;   /* centers horizontally */
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fafafa;
+  max-width: 400px;
+  padding: 1.5rem;     /* re-enable padding so it looks nice */
+  text-align: center;  /* optional: centers text inside */
+}
+
+.change-password-section h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.change-password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.password-input {
+  padding: 0.6rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.password-input:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+.password-button {
+  padding: 0.7rem 1rem;
+  background: #4f46e5;
+  color: white;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.password-button:hover {
+  background: #4338ca;
+}
+
+.password-message {
+  margin-top: 0.8rem;
+  font-size: 0.95rem;
+}
+
+.password-message:before {
+  content: "ℹ️ ";
+}
+
+.password-message.success {
+  color: green;
+}
+
+.password-message.error {
+  color: red;
+}
+
+
 

@@ -26,46 +26,59 @@ export default function CreateAccount() {
     fetchResidences();
   }, []);
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+const handleSignup = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
-    const { data: signupData, error: signupError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { emailRedirectTo: null },
-    });
+  // Vérifier doublon email
+  const { data: exists } = await supabase
+    .from("utilisateurs")
+    .select("id")
+    .eq("email", email)
+    .maybeSingle();
 
-    if (signupError) {
-      alert(signupError.message);
-      setLoading(false);
-      return;
-    }
-
-    const user = signupData.user;
-
-    if (user) {
-      const { error: insertError } = await supabase.from("utilisateurs").insert([
-        {
-          id: user.id,
-          residence_id: residenceId ? Number(residenceId) : null,
-          nom,
-          email,
-          telephone,
-          role,
-        },
-      ]);
-
-      if (insertError) {
-        console.error("Insert profile error:", insertError.message);
-        alert("Compte créé mais problème d’enregistrement du profil !");
-      } else {
-        alert("Compte créé avec succès. Vérifie ton email pour confirmer !");
-      }
-    }
-
+  if (exists) {
+    alert("Un utilisateur avec cet email existe déjà !");
     setLoading(false);
-  };
+    return;
+  }
+
+  // Créer le compte (⚠️ déconnecte l’admin si pas d’Edge Function)
+  const { data: signupData, error: signupError } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { emailRedirectTo: null },
+  });
+
+  if (signupError) {
+    alert(signupError.message);
+    setLoading(false);
+    return;
+  }
+
+  const user = signupData.user;
+
+  if (user) {
+    const { error: insertError } = await supabase.from("utilisateurs").insert([
+      {
+        id: user.id,
+        residence_id: residenceId ? Number(residenceId) : null,
+        nom,
+        email,
+        telephone,
+        role,
+      },
+    ]);
+
+    if (insertError) {
+      alert("Compte créé mais problème d’enregistrement du profil !");
+    } else {
+      alert("Compte créé avec succès ✅ L’utilisateur doit confirmer son email.");
+    }
+  }
+
+  setLoading(false);
+};
 
   return (
     <div className="create-container">
@@ -124,7 +137,7 @@ export default function CreateAccount() {
             ))}
           </select>
           <button type="submit" disabled={loading} className="create-button">
-            {loading ? "Création..." : "Créer mon compte"}
+            {loading ? "Création..." : "Créer un compte"}
           </button>
         </form>
       </div>

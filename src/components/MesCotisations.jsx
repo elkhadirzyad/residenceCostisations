@@ -8,11 +8,53 @@ export default function MesCotisations({ session }) {
   const [loading, setLoading] = useState(true);
   const [recuUrls, setRecuUrls] = useState({});
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // ✅ année sélectionnée
+   const [user, setUser] = useState(null);
+    const [newPassword, setNewPassword] = useState("");
+  const [passwordMessage, setPasswordMessage] = useState("");
 
   const months = [
     "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
     "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
   ];
+  
+   useEffect(() => {
+    const fetchUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    fetchUser();
+  }, []);
+  
+  const handleChangePassword = async (e) => {
+  e.preventDefault();
+
+  if (!newPassword || newPassword.length < 6) {
+    setPasswordMessage("Le mot de passe doit contenir au moins 6 caractères");
+    return;
+  }
+
+  // Update Supabase auth password
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
+
+  if (error) {
+    setPasswordMessage("Erreur: " + error.message);
+  } else {
+    // Save the password in utilisateurs.last_password (in plain text)
+    const { data: userData, error: updateError } = await supabase
+      .from("utilisateurs")
+      .update({ last_password: newPassword })
+      .eq("id", user.id);
+
+    if (updateError) {
+      setPasswordMessage("Mot de passe changé mais erreur enregistrement !");
+    } else {
+      setPasswordMessage("✅ Mot de passe changé avec succès !");
+      alert("Nouveau mot de passe: " + newPassword); // show the new password
+    }
+
+    setNewPassword("");
+  }
+};
 
   // ✅ années disponibles (ex: -2, current, +2)
   const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 2 + i);
@@ -79,7 +121,7 @@ export default function MesCotisations({ session }) {
       {/* Header */}
       <div className="cotisations-header">
         <h2 className="cotisations-title">
-          Mes cotisations - Résidence {residence?.nom}
+          Mes cotisations - Résidence KENZA-Appart-{residence?.nom}
         </h2>
         <button onClick={handleLogout} className="logout-button">
           Déconnexion
@@ -152,6 +194,32 @@ export default function MesCotisations({ session }) {
           </tr>
         </tbody>
       </table>
+	  <section className="change-password-section">
+        <h3>Changer mon mot de passe</h3>
+        <form onSubmit={handleChangePassword} className="change-password-form">
+          <input
+            type="password"
+            placeholder="Nouveau mot de passe"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
+            className="password-input"
+          />
+          <button type="submit" className="password-button">
+            Mettre à jour
+          </button>
+        </form>
+        {/* ✅ Display feedback message here */}
+      {passwordMessage && (
+    <p
+      className={`password-message ${
+        passwordMessage.startsWith("✅") ? "success" : "error"
+      }`}
+    >
+      {passwordMessage}
+    </p>
+  )}
+      </section>
     </div>
   );
 }
