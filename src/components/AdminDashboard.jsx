@@ -84,7 +84,7 @@ export default function AdminDashboard() {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
 
-      const { data: resData } = await supabase.from("residences").select("id, nom");
+      const { data: resData } = await supabase.from("residences").select("id, nom").order("id", { ascending: true });
       setResidences(resData || []);
 
       await fetchCotisations();
@@ -134,9 +134,10 @@ export default function AdminDashboard() {
 
         <button onClick={handleLogout} className="logout-button">Déconnexion</button>
       </div>
+	  <div className="controls">
+	  <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
       <YearSelector selectedYear={selectedYear} setSelectedYear={setSelectedYear} years={years} />
-      <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
-      
+      </div>
       {viewMode === "table" ? (
         <>
           <TableView
@@ -174,6 +175,7 @@ export default function AdminDashboard() {
   <CreateAccount />
 </section>
 */}
+
 <section className="change-password-section">
         <h3>Changer mon mot de passe</h3>
         <form onSubmit={handleChangePassword} className="change-password-form">
