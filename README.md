@@ -16,7 +16,7 @@ pour l'auth, la base Postgres, le stockage et le temps réel.
    VITE_SUPABASE_URL=https://xxx.supabase.co
    VITE_SUPABASE_ANON_KEY=eyJ...
    ```
-3. Installe les dépendances :
+3. Installe les dépendances (npm) :
    ```
    npm install
    ```
