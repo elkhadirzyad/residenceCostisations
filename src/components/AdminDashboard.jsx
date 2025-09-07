@@ -9,6 +9,7 @@ import ViewToggle from "./ViewToggle";
 import YearSelector from "./YearSelector";
 import Pagination from "./Pagination";
 import CreateAccount from "./CreateAccount";
+import Charges from "./Charges";
 
 export default function AdminDashboard() {
   const [user, setUser] = useState(null);
@@ -84,7 +85,7 @@ export default function AdminDashboard() {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
 
-      const { data: resData } = await supabase.from("residences").select("id, nom").order("id", { ascending: true });
+      const { data: resData } = await supabase.from("residences").select("id, nom").neq("nom", "Appart admin").order("id", { ascending: true });
       setResidences(resData || []);
 
       await fetchCotisations();
@@ -175,6 +176,13 @@ export default function AdminDashboard() {
   <CreateAccount />
 </section>
 */}
+
+<Charges
+  selectedYear={selectedYear}
+  months={months}
+  sanitize={sanitize}
+  cotisations={cotisations}
+/>
 
 <section className="change-password-section">
         <h3>Changer mon mot de passe</h3>

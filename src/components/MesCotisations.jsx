@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
+import Charges from "./Charges";
 import "./MesCotisations.css";
 
 export default function MesCotisations({ session }) {
@@ -194,6 +195,14 @@ export default function MesCotisations({ session }) {
           </tr>
         </tbody>
       </table>
+	  
+<Charges
+  selectedYear={selectedYear}
+  months={months}
+  sanitize={(str) => str.replace(/[^a-z0-9]/gi, "_").toLowerCase()} // petit helper
+  cotisations={cotisations}
+  readonly={true} // ✅ consultation seulement
+/>
 	  <section className="change-password-section">
         <h3>Changer mon mot de passe</h3>
         <form onSubmit={handleChangePassword} className="change-password-form">

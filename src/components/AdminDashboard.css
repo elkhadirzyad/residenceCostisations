@@ -266,5 +266,21 @@ table, th, td {
   gap: 10px; /* spacing between items */
 }
 
+/* Budget global */
+.budget-global {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.budget-global .positive {
+  color: green;
+}
+
+.budget-global .negative {
+  color: red;
+}
+
+
 
 

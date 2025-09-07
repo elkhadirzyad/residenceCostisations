@@ -1,0 +1,189 @@
+/* === SECTION CHARGES === */
+.charges-section {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: #fafafa;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.charges-section h3 {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  color: #333;
+  text-align: left;
+}
+
+.charges-section h4 {
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  color: #444;
+}
+
+/* === FORMULAIRE AJOUT === */
+.charges-form {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.charges-form select,
+.charges-form input {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.charges-form button {
+  padding: 0.5rem 1rem;
+  background: #2a8ef0;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s ease-in-out;
+}
+
+.charges-form button:hover {
+  background: #1e6fc4;
+}
+
+/* === SECTION CHARGES EN CARDS === */
+.charges-section {
+  margin: 2rem 0;
+}
+
+.charges-section h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.charges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.charge-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.charge-card h4 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: #2a2a2a;
+}
+
+.charge-total {
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 0.8rem;
+}
+
+/* Formulaire dans chaque card */
+.charges-form {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.8rem;
+}
+
+.charges-form select,
+.charges-form input {
+  padding: 0.3rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.charges-form button {
+  padding: 0.3rem 0.6rem;
+  background: #2a8ef0;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s ease-in-out;
+}
+
+.charges-form button:hover {
+  background: #1e6fc4;
+}
+
+/* Liste des charges */
+/* Liste des charges */
+.charge-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+.charge-list li {
+  //display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fafafa;
+  font-size: 0.9rem;
+}
+
+.charge-list li span {
+  flex: 1;
+  font-weight: 500;
+}
+
+/* Input fichier / bouton Voir */
+.charge-list li input[type="file"] {
+  flex: 1;
+  max-width: 160px;
+  font-size: 0.6rem;
+}
+
+.charge-list li a {
+  margin-left: 0.5rem;
+  color: #0077cc;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.charge-list li a:hover {
+  text-decoration: underline;
+}
+
+.no-charge {
+  color: #888;
+  font-style: italic;
+}
+
+/* Actions dans chaque ligne de charge */
+.charge-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Bouton supprimer */
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: red;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.delete-btn:hover {
+  transform: scale(1.2);
+}
