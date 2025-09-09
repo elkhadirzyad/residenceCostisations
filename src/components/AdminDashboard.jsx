@@ -25,7 +25,8 @@ export default function AdminDashboard() {
   const [newPassword, setNewPassword] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
 
-  
+  const currentMonthIndex = new Date().getMonth(); // 0 = Janvier, 11 = Décembre
+
   const sanitize = (str) =>
   str.normalize("NFD")
      .replace(/[\u0300-\u036f]/g, "")
@@ -145,6 +146,7 @@ export default function AdminDashboard() {
             residences={currentResidences}
             cotisations={cotisations}
             months={months}
+			currentMonthIndex={currentMonthIndex}   // 👈 added
             recuUrls={recuUrls}
             uploadStatus={uploadStatus}
             selectedYear={selectedYear}
@@ -161,6 +163,7 @@ export default function AdminDashboard() {
           setSelectedResidence={setSelectedResidence}
           cotisations={cotisations}
           months={months}
+		  currentMonthIndex={currentMonthIndex}   // 👈 added
           recuUrls={recuUrls}
           uploadStatus={uploadStatus}
           setUploadStatus={setUploadStatus}

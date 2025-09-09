@@ -3,7 +3,7 @@ import CotisationCell from "./CotisationCell";
 export default function CardsView({
   residences, selectedResidence, setSelectedResidence,
   cotisations, months, recuUrls, uploadStatus, setUploadStatus,
-  selectedYear, fetchCotisations
+  selectedYear, fetchCotisations, currentMonthIndex
 }) {
   return (
     <>
@@ -23,13 +23,16 @@ export default function CardsView({
 
       {selectedResidence && (
         <div className="months-grid">
-          {months.map(m => {
+          {months.map((m, index) => {
             const cot = cotisations.find(c => c.residence_id === parseInt(selectedResidence) && c.mois === m && c.annee === selectedYear);
             const residence = residences.find(r => r.id === parseInt(selectedResidence));
 
             return (
-              <div key={m} className="month-card">
-                <h4 className="month-title">{m} {selectedYear}</h4>
+                  <div
+       key={m}
+       className={`month-card ${index === currentMonthIndex ? "highlight-month" : ""}`}
+     >
+       <h4 className="month-title">{m} {selectedYear}</h4>
                 <table>
                   <tbody>
                     <tr>

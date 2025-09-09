@@ -281,6 +281,11 @@ table, th, td {
   color: red;
 }
 
+.highlight-month {
+  background-color: #ffeb3b; /* yellow highlight */
+  font-weight: bold;
+  border-radius: 4px;
+}
 
 
 

@@ -11,6 +11,7 @@ export default function CotisationCell({
   uploadStatus,
   setUploadStatus,
   fetchCotisations,
+  className = ""
 }) {
 
   const handleCotiser = async () => {
@@ -79,7 +80,7 @@ export default function CotisationCell({
   const statusKey = `${residence.id}_${mois}_${selectedYear}`;
 
   return (
-    <td>
+    <td className={className}>
       {!cotisation ? (
         <button onClick={handleCotiser} className="cotiser-button">Cotiser</button>
       ) : (
