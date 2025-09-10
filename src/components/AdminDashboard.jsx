@@ -126,7 +126,7 @@ export default function AdminDashboard() {
   const totalPages = Math.ceil(residences.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
   const currentResidences = residences.slice(startIndex, startIndex + rowsPerPage);
-
+const allResidences = residences;
   if (loading) return <div className="admin-container">Chargement...</div>;
 
   return (
@@ -144,6 +144,7 @@ export default function AdminDashboard() {
         <>
           <TableView
             residences={currentResidences}
+			allResidences={allResidences}
             cotisations={cotisations}
             months={months}
 			currentMonthIndex={currentMonthIndex}   // 👈 added
