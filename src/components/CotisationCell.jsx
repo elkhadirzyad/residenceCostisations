@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { supabase } from "../supabaseClient";
 import jsPDF from "jspdf";
 import { sanitize } from "./sanitize";
+import "./CotisationCell.css"; // <-- on ajoute notre CSS
 
 export default function CotisationCell({
   residence,
@@ -13,6 +15,7 @@ export default function CotisationCell({
   fetchCotisations,
   className = ""
 }) {
+  const [pdfUrl, setPdfUrl] = useState(null);
 
   const handleCotiser = async () => {
     const montant = window.prompt(`Saisir le montant de la cotisation (${mois} ${selectedYear}) pour la résidence (${residence.id}) en MAD :`);
@@ -20,7 +23,7 @@ export default function CotisationCell({
 
     const paiementDate = new Date().toLocaleString("fr-FR");
 
-    // 1️⃣ Générer PDF
+    // Générer PDF
     const doc = new jsPDF();
     doc.setFontSize(16);
     doc.text("Reçu de Cotisation", 20, 20);
@@ -37,13 +40,11 @@ export default function CotisationCell({
     const safeMonth = sanitize(mois);
     const filePath = `${residence.id}_${safeMonth}_${selectedYear}_${Date.now()}.pdf`;
 
-    // 2️⃣ Upload PDF
     const { error: uploadError } = await supabase.storage.from("newrecus").upload(filePath, pdfBlob, {
       contentType: "application/pdf",
     });
     if (uploadError) return alert("Erreur upload PDF : " + uploadError.message);
 
-    // 3️⃣ Inserer cotisation
     const { error: insertError } = await supabase.from("cotisations").insert([{
       residence_id: residence.id,
       mois,
@@ -98,7 +99,13 @@ export default function CotisationCell({
 
           {cotisation.recu_url && recuUrls[cotisation.id] ? (
             <>
-              <button onClick={() => window.open(recuUrls[cotisation.id], "_blank")} className="view-button">Voir reçu</button>
+              {/* Remplace window.open par affichage iframe */}
+              <button
+                onClick={() => setPdfUrl(recuUrls[cotisation.id])}
+                className="view-button"
+              >
+                Voir reçu
+              </button>
               <a href={recuUrls[cotisation.id]} download className="download-button">Télécharger</a>
             </>
           ) : (
@@ -113,6 +120,16 @@ export default function CotisationCell({
               {uploadStatus[statusKey].message}
             </div>
           )}
+        </div>
+      )}
+
+      {/* === Iframe centré === */}
+      {pdfUrl && (
+        <div className="iframe-overlay">
+          <div className="iframe-container">
+            <button className="iframe-close" onClick={() => setPdfUrl(null)}>✕</button>
+            <iframe src={pdfUrl} className="iframe-pdf" title="Reçu PDF"></iframe>
+          </div>
         </div>
       )}
     </td>
