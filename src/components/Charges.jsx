@@ -50,6 +50,19 @@ const getBudgetGlobal = (moisIndex, moisNom) => {
   return totalCotisations - totalCharges;
 };
 
+// ---- BUDGET GLOBAL CUMULATIF ----
+const getBudgetGlobalCumul = (moisIndex) => {
+  const totalCotisations = moisData
+    .filter(({ moisIndex: idx }) => idx <= moisIndex)
+    .reduce((sum, { moisNom }) => sum + getCotisationsParMois(moisNom), 0);
+
+  const totalCharges = moisData
+    .filter(({ moisIndex: idx }) => idx <= moisIndex)
+    .reduce((sum, { moisIndex: idx }) => sum + getTotalParMois(idx), 0);
+
+  return totalCotisations - totalCharges;
+};
+
 // ---- TOTAL ANNUEL ----
 const totalCotisationsAnnee = months.reduce(
   (sum, m) => sum + getCotisationsParMois(m),
@@ -203,7 +216,7 @@ const displayedMonthsData = moisData
           const chargesMois = charges.filter(c => c.mois === moisIndex);
           const totalCharges = getTotalParMois(moisIndex);
           const budgetGlobal = getBudgetGlobal(moisIndex, moisNom);
-
+          const budgetGlobalCumul = getBudgetGlobalCumul(moisIndex);
           return (
            <div
   className={`charge-card ${moisIndex === currentMonth ? "current-month" : ""}`}
@@ -214,7 +227,13 @@ const displayedMonthsData = moisData
     Total Charges : <strong>{totalCharges} DH</strong>
   </p>
   <p className="budget-global">
-    Budget global :{" "}
+    Budget global (en cumulant) :{" "}
+    <strong className={budgetGlobalCumul < 0 ? "negative" : "positive"}>
+      {budgetGlobalCumul} DH
+    </strong>
+  </p>
+   <p className="budget-global">
+    Budget global mensuel :{" "}
     <strong className={budgetGlobal < 0 ? "negative" : "positive"}>
       {budgetGlobal} DH
     </strong>

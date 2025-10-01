@@ -75,6 +75,9 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+    /* Ajouts pour le scroll */
+    max-height: 400px;  /* tu choisis la hauteur fixe */
+    overflow-y: auto;   /* active l’ascenseur vertical */
 }
 
 .charge-card h4 {

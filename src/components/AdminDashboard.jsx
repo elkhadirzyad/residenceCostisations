@@ -33,7 +33,7 @@ export default function AdminDashboard() {
      .replace(/\s+/g, "_")
      .replace(/[^a-zA-Z0-9._-]/g, "");
 
-  const rowsPerPage = 24;
+  const rowsPerPage = 8;
   const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
                   "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
   const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 2 + i);
