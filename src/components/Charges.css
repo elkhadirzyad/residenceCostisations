@@ -187,3 +187,9 @@
 .delete-btn:hover {
   transform: scale(1.2);
 }
+
+.current-month {
+  border: 2px solid #007bff;   /* contour bleu */
+  background-color: #eaf4ff;   /* fond bleu clair */
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+}

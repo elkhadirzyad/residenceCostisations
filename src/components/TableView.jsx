@@ -15,13 +15,20 @@ export default function TableView({
       .reduce((sum, c) => sum + (parseFloat(c.total) || 0), 0);
     return acc;
   }, {});
+  
+    // Calcul total de l'année
+  const annualTotal = Object.values(monthlyTotals).reduce((sum, val) => sum + val, 0);
+
 
   // Fermer popup
   const closeDialog = () => setSelectedMonth(null);
 
   return (
     <div>
-      <table className="admin-table">
+	<div className="annual-budget">
+      <h3>Total {selectedYear} : {annualTotal} MAD</h3>
+    </div>
+      <table className="">
         <thead>
           <tr>
             <th>Résidence</th>

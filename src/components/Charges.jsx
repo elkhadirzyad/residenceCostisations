@@ -50,6 +50,27 @@ const getBudgetGlobal = (moisIndex, moisNom) => {
   return totalCotisations - totalCharges;
 };
 
+// ---- TOTAL ANNUEL ----
+const totalCotisationsAnnee = months.reduce(
+  (sum, m) => sum + getCotisationsParMois(m),
+  0
+);
+
+const totalChargesAnnee = moisData.reduce(
+  (sum, { moisIndex }) => sum + getTotalParMois(moisIndex),
+  0
+);
+
+const budgetGlobalAnnee = totalCotisationsAnnee - totalChargesAnnee;
+
+const currentMonth = new Date().getMonth() + 1;
+
+// On garde seulement janvier → mois courant
+const displayedMonthsData = moisData
+  .filter(({ moisIndex }) => moisIndex <= currentMonth)
+  .sort((a, b) => b.moisIndex - a.moisIndex); // ordre décroissant
+
+
   
   // ---- FETCH ----
   const fetchCharges = async () => {
@@ -163,24 +184,41 @@ const getBudgetGlobal = (moisIndex, moisNom) => {
   return (
     <section className="charges-section">
       <h3>Charges {selectedYear}</h3>
+	   <div className="charges-summary">
+    <p>
+      💰 Total cotisations {selectedYear} : <strong>{totalCotisationsAnnee} DH</strong>
+    </p>
+    <p>
+      🧾 Total charges {selectedYear} : <strong>{totalChargesAnnee} DH</strong>
+    </p>
+    <p>
+      📊 Budget global {selectedYear} :{" "}
+      <strong className={budgetGlobalAnnee < 0 ? "negative" : "positive"}>
+        {budgetGlobalAnnee} DH
+      </strong>
+    </p>
+  </div>
       <div className="charges-grid">
-        {moisData.map(({ moisIndex, moisNom }) => {
+        {displayedMonthsData.map(({ moisIndex, moisNom }) => {
           const chargesMois = charges.filter(c => c.mois === moisIndex);
           const totalCharges = getTotalParMois(moisIndex);
           const budgetGlobal = getBudgetGlobal(moisIndex, moisNom);
 
           return (
-            <div className="charge-card" key={moisNom}>
-              <h4>{moisNom}</h4>
-              <p className="charge-total">
-                Total Charges : <strong>{totalCharges} DH</strong>
-              </p>
-              <p className="budget-global">
-                Budget global :{" "}
-                <strong className={budgetGlobal < 0 ? "negative" : "positive"}>
-                  {budgetGlobal} DH
-                </strong>
-              </p>
+           <div
+  className={`charge-card ${moisIndex === currentMonth ? "current-month" : ""}`}
+  key={moisNom}
+>
+  <h4>{moisNom}</h4>
+  <p className="charge-total">
+    Total Charges : <strong>{totalCharges} DH</strong>
+  </p>
+  <p className="budget-global">
+    Budget global :{" "}
+    <strong className={budgetGlobal < 0 ? "negative" : "positive"}>
+      {budgetGlobal} DH
+    </strong>
+  </p>
 
               {/* ✅ On affiche le formulaire seulement si pas readonly */}
               {!readonly && (
