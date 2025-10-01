@@ -223,12 +223,12 @@ const displayedMonthsData = moisData
               {/* ✅ On affiche le formulaire seulement si pas readonly */}
               {!readonly && (
                 <form onSubmit={(e) => handleAddCharge(e, moisIndex)} className="charges-form">
-                  <select name="type" required>
-                    <option value="menage">Femme de ménage</option>
-                    <option value="eau">Eau</option>
-                    <option value="electricite">Électricité</option>
-                    <option value="autre">Autre</option>
-                  </select>
+                  <input
+  type="text"
+  name="type"
+  placeholder="Type de charge"
+  required
+/>
                   <input
                     type="number"
                     step="0.01"
